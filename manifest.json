@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "GitHub Enhancer",
+  "version": "1.0.0",
+  "description": "Enhances GitHub repo pages by making README prominent and moving file tree to sidebar",
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*/*"],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}
