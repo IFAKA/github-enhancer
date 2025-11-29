@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Black background -->
+  <rect width="128" height="128" rx="16" fill="#000000"/>
+
+  <!-- White G letter -->
+  <text x="64" y="82"
+        font-family="Arial, sans-serif"
+        font-size="72"
+        font-weight="bold"
+        fill="white"
+        text-anchor="middle">G</text>
+
+  <!-- White 4-pointed star in top right -->
+  <g transform="translate(98, 28)">
+    <!-- Vertical spike -->
+    <path d="M0,-14 L2,0 L0,14 L-2,0 Z" fill="white"/>
+    <!-- Horizontal spike -->
+    <path d="M-14,0 L0,-2 L14,0 L0,2 Z" fill="white"/>
+  </g>
+</svg>
