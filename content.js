@@ -161,9 +161,9 @@
     const actionsContainer = document.createElement('div');
     actionsContainer.className = 'gh-enhancer-actions-container';
 
-    // Add in order: Stars, Forks, Watch
-    if (starItem) {
-      const clone = starItem.cloneNode(true);
+    // Add in order: Watch, Fork, Star (original GitHub order)
+    if (watchItem) {
+      const clone = watchItem.cloneNode(true);
       processActionButton(clone);
       actionsContainer.appendChild(clone);
     }
@@ -172,8 +172,8 @@
       processActionButton(clone);
       actionsContainer.appendChild(clone);
     }
-    if (watchItem) {
-      const clone = watchItem.cloneNode(true);
+    if (starItem) {
+      const clone = starItem.cloneNode(true);
       processActionButton(clone);
       actionsContainer.appendChild(clone);
     }
