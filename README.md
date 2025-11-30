@@ -8,7 +8,7 @@ A Chrome extension that enhances the GitHub repository experience with better RE
 
 ## Preview
 
-![GitHub Enhancer Preview](media/preview.png)
+<img src="https://github.com/user-attachments/assets/63f54bf1-e6a1-44ab-a5ff-e39aae0bd6a5" alt="GitHub Enhancer Preview" width="100%">
 
 ## Demo
 
