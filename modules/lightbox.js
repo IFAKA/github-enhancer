@@ -5,6 +5,15 @@
 
   const GH = window.GitHubEnhancer = window.GitHubEnhancer || {};
 
+  // Store event handlers for cleanup
+  let documentHandlers = {
+    mousemove: null,
+    mouseup: null,
+    keydown: null,
+    keyup: null,
+    blur: null
+  };
+
   /**
    * Create image lightbox
    */
@@ -83,21 +92,23 @@
       img.style.cursor = 'grabbing';
     });
 
-    document.addEventListener('mousemove', (e) => {
+    documentHandlers.mousemove = (e) => {
       if (!isPanning) return;
       hasDragged = true;
       e.preventDefault();
       translateX = e.clientX - startX;
       translateY = e.clientY - startY;
       updateImageTransform();
-    });
+    };
+    document.addEventListener('mousemove', documentHandlers.mousemove);
 
-    document.addEventListener('mouseup', () => {
+    documentHandlers.mouseup = () => {
       if (isPanning) {
         isPanning = false;
         img.style.cursor = '';
       }
-    });
+    };
+    document.addEventListener('mouseup', documentHandlers.mouseup);
 
     img.addEventListener('click', (e) => {
       if (hasDragged || Date.now() - mouseDownTime > 200) return;
@@ -256,7 +267,7 @@
 
     GH.state.lightboxOverlay.querySelector('.gh-enhancer-lightbox-backdrop').addEventListener('click', closeLightbox);
 
-    document.addEventListener('keydown', (e) => {
+    documentHandlers.keydown = (e) => {
       if (!GH.state.lightboxOverlay.classList.contains('gh-enhancer-lightbox-visible')) return;
 
       if (e.ctrlKey || e.metaKey) {
@@ -295,19 +306,22 @@
           setTimeout(() => img.classList.remove('gh-enhancer-zooming'), 200);
           break;
       }
-    });
+    };
+    document.addEventListener('keydown', documentHandlers.keydown);
 
-    document.addEventListener('keyup', (e) => {
+    documentHandlers.keyup = (e) => {
       if (!GH.state.lightboxOverlay.classList.contains('gh-enhancer-lightbox-visible')) return;
 
       if (!e.ctrlKey && !e.metaKey) {
         GH.state.lightboxOverlay.classList.remove('gh-enhancer-ctrl-pressed');
       }
-    });
+    };
+    document.addEventListener('keyup', documentHandlers.keyup);
 
-    window.addEventListener('blur', () => {
+    documentHandlers.blur = () => {
       GH.state.lightboxOverlay.classList.remove('gh-enhancer-ctrl-pressed');
-    });
+    };
+    window.addEventListener('blur', documentHandlers.blur);
 
     GH.state.lightboxOverlay.openImage = (src, sourceImg) => {
       currentImageSrc = src;
@@ -399,7 +413,32 @@
   }
 
   function reset() {
-    // Lightbox stays in DOM, just reset state
+    // Clean up document-level event listeners
+    if (documentHandlers.mousemove) {
+      document.removeEventListener('mousemove', documentHandlers.mousemove);
+      documentHandlers.mousemove = null;
+    }
+    if (documentHandlers.mouseup) {
+      document.removeEventListener('mouseup', documentHandlers.mouseup);
+      documentHandlers.mouseup = null;
+    }
+    if (documentHandlers.keydown) {
+      document.removeEventListener('keydown', documentHandlers.keydown);
+      documentHandlers.keydown = null;
+    }
+    if (documentHandlers.keyup) {
+      document.removeEventListener('keyup', documentHandlers.keyup);
+      documentHandlers.keyup = null;
+    }
+    if (documentHandlers.blur) {
+      window.removeEventListener('blur', documentHandlers.blur);
+      documentHandlers.blur = null;
+    }
+    // Remove lightbox from DOM so it's recreated fresh
+    if (GH.state.lightboxOverlay) {
+      GH.state.lightboxOverlay.remove();
+      GH.state.lightboxOverlay = null;
+    }
   }
 
   GH.lightbox = { init, reset };

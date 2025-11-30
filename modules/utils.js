@@ -11,8 +11,25 @@
     currentSectionElement: null,
     tocPanel: null,
     lightboxOverlay: null,
-    currentFontSize: 100
+    currentFontSize: 100,
+    // Cached DOM elements (cleared on navigation)
+    cachedElements: {
+      readme: null,
+      sidebar: null,
+      fileTable: null,
+      latestCommitBox: null
+    }
   };
+
+  /**
+   * Clear cached DOM elements (call on navigation)
+   */
+  function clearElementCache() {
+    GH.state.cachedElements.readme = null;
+    GH.state.cachedElements.sidebar = null;
+    GH.state.cachedElements.fileTable = null;
+    GH.state.cachedElements.latestCommitBox = null;
+  }
 
   /**
    * Check if current page is a repo main page
@@ -64,33 +81,45 @@
   }
 
   /**
-   * Find the LatestCommit box element
+   * Find the LatestCommit box element (cached)
    */
   function findLatestCommitBox() {
-    return document.querySelector('[class*="LatestCommit-module__Box"]');
+    if (!GH.state.cachedElements.latestCommitBox) {
+      GH.state.cachedElements.latestCommitBox = document.querySelector('[class*="LatestCommit-module__Box"]');
+    }
+    return GH.state.cachedElements.latestCommitBox;
   }
 
   /**
-   * Find the file tree table
+   * Find the file tree table (cached)
    */
   function findFileTable() {
-    return document.querySelector('table[aria-labelledby="folders-and-files"]') ||
-           document.querySelector('[data-hpc="true"] table');
+    if (!GH.state.cachedElements.fileTable) {
+      GH.state.cachedElements.fileTable = document.querySelector('table[aria-labelledby="folders-and-files"]') ||
+             document.querySelector('[data-hpc="true"] table');
+    }
+    return GH.state.cachedElements.fileTable;
   }
 
   /**
-   * Find the README markdown body
+   * Find the README markdown body (cached)
    */
   function findReadme() {
-    return document.querySelector('.markdown-body');
+    if (!GH.state.cachedElements.readme) {
+      GH.state.cachedElements.readme = document.querySelector('.markdown-body');
+    }
+    return GH.state.cachedElements.readme;
   }
 
   /**
-   * Find the sidebar element
+   * Find the sidebar element (cached)
    */
   function findSidebar() {
-    return document.querySelector('.Layout-sidebar .BorderGrid.about-margin') ||
-           document.querySelector('.Layout-sidebar .BorderGrid');
+    if (!GH.state.cachedElements.sidebar) {
+      GH.state.cachedElements.sidebar = document.querySelector('.Layout-sidebar .BorderGrid.about-margin') ||
+             document.querySelector('.Layout-sidebar .BorderGrid');
+    }
+    return GH.state.cachedElements.sidebar;
   }
 
   // Export utilities
@@ -101,6 +130,7 @@
     findLatestCommitBox,
     findFileTable,
     findReadme,
-    findSidebar
+    findSidebar,
+    clearElementCache
   };
 })();

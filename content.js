@@ -48,6 +48,9 @@
     GH.state.isProcessed = false;
     GH.state.currentSectionElement = null;
 
+    // Clear cached DOM elements
+    GH.utils.clearElementCache();
+
     // Restore hidden elements
     const repoHeader = document.querySelector('#repository-container-header[style*="display: none"]');
     if (repoHeader) repoHeader.style.display = '';

@@ -5,17 +5,21 @@
 
   const GH = window.GitHubEnhancer = window.GitHubEnhancer || {};
 
+  // Store scroll handler reference for cleanup
+  let scrollHandler = null;
+
   /**
    * Setup scroll tracking for TOC highlighting
    */
   function setupTOCScrollTracking(headings, nav) {
     const links = nav.querySelectorAll('.gh-enhancer-toc-link');
+    const headingsArray = Array.from(headings); // Cache array conversion
 
     const updateActiveLink = () => {
       let currentIndex = -1;
 
-      for (let i = 0; i < headings.length; i++) {
-        const rect = headings[i].getBoundingClientRect();
+      for (let i = 0; i < headingsArray.length; i++) {
+        const rect = headingsArray[i].getBoundingClientRect();
         if (rect.top < 120) {
           currentIndex = i;
         } else {
@@ -33,7 +37,7 @@
     };
 
     let ticking = false;
-    window.addEventListener('scroll', () => {
+    scrollHandler = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
           updateActiveLink();
@@ -41,7 +45,8 @@
         });
         ticking = true;
       }
-    });
+    };
+    window.addEventListener('scroll', scrollHandler, { passive: true });
 
     updateActiveLink();
   }
@@ -105,6 +110,8 @@
     `;
 
     const nav = GH.state.tocPanel.querySelector('.gh-enhancer-toc-nav');
+    const fragment = document.createDocumentFragment();
+    const headingElements = []; // Store heading elements for click delegation
 
     headings.forEach((heading, index) => {
       const headingEl = heading.querySelector('h1, h2, h3, h4, h5, h6');
@@ -121,13 +128,22 @@
       link.textContent = text;
       link.dataset.headingIndex = index;
 
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        headingEl.scrollIntoView({ behavior: 'smooth' });
-      });
-
-      nav.appendChild(link);
+      headingElements[index] = headingEl;
+      fragment.appendChild(link);
     });
+
+    // Event delegation: single click handler for all TOC links
+    nav.addEventListener('click', (e) => {
+      const link = e.target.closest('.gh-enhancer-toc-link');
+      if (!link) return;
+      e.preventDefault();
+      const index = parseInt(link.dataset.headingIndex, 10);
+      if (headingElements[index]) {
+        headingElements[index].scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    nav.appendChild(fragment);
 
     GH.state.tocPanel.querySelector('.gh-enhancer-toc-close').addEventListener('click', () => {
       GH.state.tocPanel.classList.add('gh-enhancer-toc-hidden');
@@ -151,6 +167,11 @@
   }
 
   function reset() {
+    // Clean up scroll listener
+    if (scrollHandler) {
+      window.removeEventListener('scroll', scrollHandler);
+      scrollHandler = null;
+    }
     document.querySelectorAll('.gh-enhancer-toc-panel').forEach(el => el.remove());
     document.querySelectorAll('.gh-enhancer-toc-toggle').forEach(el => el.remove());
     GH.state.tocPanel = null;
