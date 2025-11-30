@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/8c38e888-3225-45ea-bb7e-eddf197aa8ed" alt="GitHub Enhancer Banner" width="100%">
+  <img src="https://github.com/user-attachments/assets/8f05af7a-0836-44b2-be15-8443ac6dcb7c" alt="GitHub Enhancer Banner" width="100%">
 </p>
 
 # GitHub Enhancer
