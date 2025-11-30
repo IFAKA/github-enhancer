@@ -1,0 +1,77 @@
+/* GitHub Enhancer - Section Indicator Styles */
+
+/* Section indicator in navigation */
+.gh-enhancer-section-indicator {
+  margin-left: auto !important;
+}
+
+.gh-enhancer-section-link {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 8px 12px !important;
+  text-decoration: none !important;
+  color: var(--fgColor-muted, var(--color-fg-muted)) !important;
+  font-size: 14px !important;
+  max-width: 200px !important;
+  cursor: pointer !important;
+}
+
+.gh-enhancer-section-link:hover {
+  color: var(--fgColor-default, var(--color-fg-default)) !important;
+}
+
+/* Text wrapper for overflow and animation */
+.gh-enhancer-section-text-wrapper {
+  overflow: hidden;
+  position: relative;
+  height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.gh-enhancer-section-text {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+/* Slide up animation */
+@keyframes slideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Slide down animation */
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.gh-enhancer-slide-up {
+  animation: slideUp 0.25s ease-out forwards;
+}
+
+.gh-enhancer-slide-down {
+  animation: slideDown 0.25s ease-out forwards;
+}

@@ -11,8 +11,41 @@
   "content_scripts": [
     {
       "matches": ["https://github.com/*/*"],
-      "js": ["content.js"],
-      "css": ["styles.css"],
+      "js": [
+        "modules/utils.js",
+        "modules/repo-actions.js",
+        "modules/file-actions.js",
+        "modules/collapse-toggle.js",
+        "modules/section-indicator.js",
+        "modules/import-linkify.js",
+        "modules/toc-panel.js",
+        "modules/anchor-preview.js",
+        "modules/code-collapse.js",
+        "modules/lightbox.js",
+        "modules/external-links.js",
+        "modules/font-controls.js",
+        "modules/reading-time.js",
+        "modules/repo-preview.js",
+        "modules/badge-tooltips.js",
+        "content.js"
+      ],
+      "css": [
+        "styles.css",
+        "modules/repo-actions.css",
+        "modules/file-actions.css",
+        "modules/collapse-toggle.css",
+        "modules/section-indicator.css",
+        "modules/import-linkify.css",
+        "modules/toc-panel.css",
+        "modules/anchor-preview.css",
+        "modules/code-collapse.css",
+        "modules/lightbox.css",
+        "modules/external-links.css",
+        "modules/font-controls.css",
+        "modules/reading-time.css",
+        "modules/repo-preview.css",
+        "modules/badge-tooltips.css"
+      ],
       "run_at": "document_idle"
     }
   ]

@@ -1,0 +1,26 @@
+/* GitHub Enhancer - Anchor Preview Styles */
+
+.gh-enhancer-anchor-preview {
+  position: absolute;
+  z-index: 1000;
+  max-width: 350px;
+  padding: 12px 16px;
+  background: var(--bgColor-default, var(--color-canvas-default, #0d1117));
+  border: 1px solid var(--borderColor-muted, var(--color-border-muted, #30363d));
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.gh-enhancer-anchor-preview strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--fgColor-default, var(--color-fg-default, #e6edf3));
+  font-size: 14px;
+}
+
+.gh-enhancer-anchor-preview p {
+  margin: 0;
+  color: var(--fgColor-muted, var(--color-fg-muted, #8b949e));
+}

@@ -4,135 +4,233 @@ A Chrome extension that enhances the GitHub repository experience with better RE
 
 ## Features
 
-### Image Lightbox with View Transitions API
+- **Image Lightbox** - Click images for fullscreen view with zoom, pan, copy, and download
+- **Collapsible Code Blocks** - Long code blocks auto-collapse with expand button
+- **Table of Contents** - Floating TOC panel with scroll tracking
+- **Anchor Link Preview** - Hover over `#section` links for previews
+- **External Link Indicators** - Visual markers on external links
+- **Font Size Controls** - Adjust README text size (`+`/`-`/`0` keys)
+- **Reading Time** - Estimated reading time in sidebar
+- **Badge Tooltips** - Hover over shields.io badges for explanations
+- **npm Import Links** - Ctrl/Cmd+click imports to view on npm
+- **Simplified Repo Actions** - Star/Watch/Fork buttons in sidebar
+- **Collapsible File Tree** - Toggle file list to focus on README
+- **Repo Link Previews** - Hover over GitHub repo links to see stats
 
-Click any image in a README to open it in a fullscreen lightbox with a beautiful **shared element transition** (hero animation).
+## Installation
 
-**How it works:**
+### Development
 
-The lightbox uses the native [View Transitions API](https://developer.chrome.com/docs/web-platform/view-transitions) to create a smooth morphing animation where the image appears to "fly" from its position in the README to the center of the screen.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/github-enhancer.git
+   cd github-enhancer
+   ```
+
+2. Load in Chrome:
+   - Navigate to `chrome://extensions`
+   - Enable **Developer mode** (top right toggle)
+   - Click **Load unpacked**
+   - Select the extension folder
+
+3. The extension will activate on any `github.com/*/*` page
+
+### From Release
+
+1. Download the latest release
+2. Extract and load unpacked in Chrome
+
+## Project Structure
+
+```
+github-enhancer/
+├── manifest.json          # Extension manifest (v3)
+├── content.js             # Main entry point - orchestrates modules
+├── styles.css             # Base styles
+├── icons/                 # Extension icons (16, 48, 128px)
+└── modules/               # Feature modules
+    ├── utils.js           # Shared utilities and state
+    ├── repo-actions.js    # Star/Watch/Fork sidebar buttons
+    ├── file-actions.js    # File action buttons
+    ├── collapse-toggle.js # File tree collapse
+    ├── section-indicator.js # Current section highlighting
+    ├── import-linkify.js  # npm import links
+    ├── toc-panel.js       # Table of contents
+    ├── anchor-preview.js  # Anchor link previews
+    ├── code-collapse.js   # Code block collapsing
+    ├── lightbox.js        # Image lightbox
+    ├── external-links.js  # External link indicators
+    ├── font-controls.js   # Font size controls
+    ├── reading-time.js    # Reading time calculator
+    ├── repo-preview.js    # Repo link hover previews
+    └── badge-tooltips.js  # Badge explanations
+```
+
+## Architecture
+
+### Module System
+
+Each feature is a self-contained module following this pattern:
 
 ```javascript
-// 1. Give the source image a view-transition-name
+// modules/example.js
+(function() {
+  'use strict';
+
+  const GH = window.GitHubEnhancer = window.GitHubEnhancer || {};
+
+  function init() {
+    // Setup logic - called when page loads
+  }
+
+  function reset() {
+    // Cleanup logic - called on SPA navigation
+  }
+
+  // Export to namespace
+  GH.example = { init, reset };
+})();
+```
+
+### Shared State
+
+All modules share state via `window.GitHubEnhancer.state`:
+
+```javascript
+GH.state = {
+  isProcessed: false,        // Prevents double-processing
+  observer: null,            // MutationObserver instance
+  currentSectionElement: null,
+  tocPanel: null,
+  lightboxOverlay: null,
+  currentFontSize: 100
+};
+```
+
+### Utilities (`modules/utils.js`)
+
+Common helpers available to all modules:
+
+| Function | Description |
+|----------|-------------|
+| `isRepoMainPage()` | Check if on a repo main page |
+| `formatNumber(num)` | Format numbers (1000 → 1k) |
+| `timeAgo(dateString)` | Relative time (2 days ago) |
+| `findLatestCommitBox()` | Get commit box element |
+| `findFileTable()` | Get file tree table |
+| `findReadme()` | Get README `.markdown-body` |
+| `findSidebar()` | Get sidebar element |
+
+### Entry Point (`content.js`)
+
+The main script handles:
+1. **Initialization** - Calls all module `init()` functions
+2. **SPA Navigation** - Detects URL changes via MutationObserver
+3. **Cleanup** - Calls all module `reset()` functions on navigation
+
+Navigation events handled:
+- `turbo:load` - GitHub's Turbo navigation
+- `pjax:end` - Legacy pjax navigation
+- MutationObserver - Fallback for URL changes
+
+## Adding a New Module
+
+1. Create `modules/your-feature.js`:
+   ```javascript
+   (function() {
+     'use strict';
+     const GH = window.GitHubEnhancer = window.GitHubEnhancer || {};
+
+     function init() {
+       const readme = GH.utils.findReadme();
+       if (!readme) return;
+       // Your feature logic
+     }
+
+     function reset() {
+       // Cleanup DOM elements, event listeners
+     }
+
+     GH.yourFeature = { init, reset };
+   })();
+   ```
+
+2. Create `modules/your-feature.css` for styles (prefix classes with `gh-enhancer-`)
+
+3. Register in `manifest.json`:
+   ```json
+   {
+     "content_scripts": [{
+       "js": [..., "modules/your-feature.js", "content.js"],
+       "css": [..., "modules/your-feature.css"]
+     }]
+   }
+   ```
+
+4. Call from `content.js`:
+   ```javascript
+   // In enhance()
+   GH.yourFeature.init();
+
+   // In reset()
+   GH.yourFeature.reset();
+   ```
+
+## CSS Conventions
+
+- Prefix all classes with `gh-enhancer-` to avoid conflicts
+- Use CSS custom properties for theming when possible
+- Module styles go in their own `modules/*.css` file
+
+## Debugging
+
+Open DevTools Console and look for `[GitHub Enhancer]` logs:
+```
+[GitHub Enhancer] Page enhanced
+```
+
+Access the extension namespace:
+```javascript
+window.GitHubEnhancer        // Full namespace
+GH.state                     // Shared state
+GH.utils.isRepoMainPage()    // Utility check
+```
+
+## Browser Support
+
+| Browser | Minimum Version |
+|---------|----------------|
+| Chrome | 111+ |
+| Edge | 111+ |
+| Opera | 97+ |
+
+> View Transitions API required for lightbox animations
+
+## Technical Notes
+
+### View Transitions API
+
+The lightbox uses the native [View Transitions API](https://developer.chrome.com/docs/web-platform/view-transitions) for smooth image animations:
+
+```javascript
+// Assign transition name to source image
 sourceImg.style.viewTransitionName = 'lightbox-hero';
 
-// 2. Start the view transition
+// Start transition
 document.startViewTransition(() => {
-  // Transfer the name to the lightbox image
   sourceImg.style.viewTransitionName = '';
   lightboxImg.style.viewTransitionName = 'lightbox-hero';
-
-  // Show the lightbox
   lightbox.classList.add('visible');
 });
 ```
 
-```css
-/* Customize the transition animation */
-::view-transition-old(lightbox-hero),
-::view-transition-new(lightbox-hero) {
-  animation-duration: 0.3s;
-  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  object-fit: contain;
-}
-```
+### GitHub SPA Handling
 
-**The magic:** By giving both the source and destination images the same `view-transition-name`, the browser automatically:
-1. Captures the old element's position, size, and appearance
-2. Captures the new element's position, size, and appearance
-3. Animates between them with a smooth morph effect
+GitHub uses multiple navigation systems:
+- **Turbo** - Modern navigation
+- **pjax** - Legacy navigation
 
-**Lightbox controls:**
-- Zoom in/out with buttons or `+`/`-` keys
-- Pan by dragging when zoomed in
-- Copy image to clipboard
-- Download image
-- Close with click outside, Escape, or close button
-
-### Collapsible Code Blocks
-
-Long code blocks (>40% of viewport height) are automatically collapsed with an "Expand" button showing how many lines are hidden.
-
-### Table of Contents
-
-A floating TOC panel on the right side showing all headings, with the current section highlighted as you scroll.
-
-### Other Features
-
-- **Anchor Link Preview**: Hover over internal `#section` links to see a preview
-- **External Link Indicators**: External links show a small icon
-- **Font Size Controls**: Adjust README text size from the sidebar (`+`/`-`/`0` keys)
-- **Reading Time**: Estimated reading time shown in sidebar
-- **Badge Tooltips**: Hover over shields.io badges for explanations
-- **Clickable npm Imports**: Ctrl/Cmd+click on import statements to view packages on npm
-- **Simplified Repo Actions**: Star/Watch/Fork buttons moved to sidebar
-- **Collapsible File Tree**: Toggle the file list to focus on README
-
-## Installation
-
-1. Clone this repository
-2. Open Chrome and go to `chrome://extensions`
-3. Enable "Developer mode"
-4. Click "Load unpacked" and select the extension folder
-
-## Browser Support
-
-- Chrome 111+ (required for View Transitions API)
-- Edge 111+
-- Opera 97+
-
-## How View Transitions Work
-
-The View Transitions API (formerly "Shared Element Transitions") was added to Chrome in version 111. It provides a simple way to create animated transitions between DOM states.
-
-### Basic Usage
-
-```javascript
-// Wrap any DOM changes in startViewTransition
-document.startViewTransition(() => {
-  // Update DOM here
-  element.classList.add('new-state');
-});
-```
-
-### Shared Element Transitions
-
-To animate an element moving between two positions:
-
-1. **Before transition**: Give the element a unique `view-transition-name`
-2. **During transition callback**: Transfer that name to the destination element
-3. **The browser handles the rest**: It animates position, size, and opacity automatically
-
-```javascript
-// Source element (e.g., thumbnail)
-thumbnail.style.viewTransitionName = 'my-image';
-
-document.startViewTransition(() => {
-  thumbnail.style.viewTransitionName = '';
-  fullImage.style.viewTransitionName = 'my-image';
-  showFullImage();
-});
-```
-
-### Customizing Animations
-
-Use the `::view-transition-old()` and `::view-transition-new()` pseudo-elements:
-
-```css
-::view-transition-old(my-image) {
-  animation: fade-out 0.3s ease-out;
-}
-
-::view-transition-new(my-image) {
-  animation: fade-in 0.3s ease-in;
-}
-```
-
-### Resources
-
-- [Chrome Docs: View Transitions](https://developer.chrome.com/docs/web-platform/view-transitions)
-- [MDN: View Transition API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API)
-- [Smashing Magazine Tutorial](https://www.smashingmagazine.com/2023/12/view-transitions-api-ui-animations-part1/)
+The extension handles both plus a MutationObserver fallback to ensure enhancements apply after any navigation.
 
 ## License
 

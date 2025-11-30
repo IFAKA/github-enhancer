@@ -1,0 +1,58 @@
+/* GitHub Enhancer - Code Collapse Styles */
+
+/* Fade gradient at bottom when collapsed */
+.highlight.gh-enhancer-code-collapsed {
+  position: relative;
+}
+
+.highlight.gh-enhancer-code-collapsed::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--bgColor-muted, var(--color-canvas-subtle, #161b22)));
+  pointer-events: none;
+  border-radius: 0 0 6px 6px;
+}
+
+/* Expand/collapse button - GitHub style */
+.gh-enhancer-code-expand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 16px;
+  margin-top: -6px;
+  margin-bottom: 16px;
+  background: var(--bgColor-muted, var(--color-canvas-subtle, #161b22));
+  border: 1px solid var(--borderColor-muted, var(--color-border-muted, #30363d));
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+  color: var(--fgColor-muted, var(--color-fg-muted, #8b949e));
+  transition: color 0.15s, background 0.15s;
+}
+
+.gh-enhancer-code-expand:hover {
+  background: var(--bgColor-neutral-muted, var(--color-neutral-muted, #6e768166));
+  color: var(--fgColor-default, var(--color-fg-default, #e6edf3));
+}
+
+.gh-enhancer-expand-icon {
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.gh-enhancer-expand-text {
+  font-weight: 500;
+}
+
+.gh-enhancer-expand-lines {
+  opacity: 0.6;
+  font-size: 11px;
+}

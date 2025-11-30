@@ -1,0 +1,171 @@
+/* GitHub Enhancer - Lightbox Styles */
+
+.gh-enhancer-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.gh-enhancer-lightbox.gh-enhancer-lightbox-visible {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* View Transitions API styles */
+::view-transition-old(lightbox-hero),
+::view-transition-new(lightbox-hero) {
+  object-fit: contain;
+  animation-duration: 0.2s;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.15s;
+}
+
+.gh-enhancer-lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+}
+
+.gh-enhancer-lightbox-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 90vw;
+  max-height: 90vh;
+  z-index: 1;
+}
+
+.gh-enhancer-lightbox-image-wrapper {
+  overflow: auto;
+  max-width: 90vw;
+  max-height: calc(90vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gh-enhancer-lightbox-image {
+  max-width: 100%;
+  max-height: calc(90vh - 80px);
+  object-fit: contain;
+  border-radius: 4px;
+  transform-origin: center center;
+  cursor: zoom-in;
+}
+
+/* When Ctrl/Cmd is pressed, show zoom-out cursor */
+.gh-enhancer-lightbox.gh-enhancer-ctrl-pressed .gh-enhancer-lightbox-image {
+  cursor: zoom-out;
+}
+
+/* Smooth transition only when zooming, not when panning */
+.gh-enhancer-lightbox-image.gh-enhancer-zooming {
+  transition: transform 0.2s ease-out;
+}
+
+.gh-enhancer-lightbox-controls {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bgColor-default, var(--color-canvas-default, #0d1117));
+  border-radius: 8px;
+  border: 1px solid var(--borderColor-muted, var(--color-border-muted, #30363d));
+  z-index: 10001;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.gh-enhancer-lightbox-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  color: var(--fgColor-muted, var(--color-fg-muted, #8b949e));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.gh-enhancer-lightbox-btn:hover {
+  background: var(--bgColor-neutral-muted, var(--color-neutral-muted, #6e768166));
+  color: var(--fgColor-default, var(--color-fg-default, #e6edf3));
+}
+
+.gh-enhancer-lightbox-btn-success {
+  color: var(--fgColor-success, var(--color-success-fg, #3fb950)) !important;
+  background: rgba(63, 185, 80, 0.15) !important;
+}
+
+.gh-enhancer-lightbox-btn-success::after {
+  content: 'Copied!';
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  background: var(--fgColor-success, var(--color-success-fg, #3fb950));
+  color: #fff;
+  font-size: 11px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.gh-enhancer-lightbox-btn-downloading {
+  color: var(--fgColor-accent, var(--color-accent-fg, #58a6ff)) !important;
+  background: rgba(56, 139, 253, 0.15) !important;
+}
+
+.gh-enhancer-lightbox-btn-downloading::after {
+  content: 'Downloading...';
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  background: var(--fgColor-accent, var(--color-accent-fg, #58a6ff));
+  color: #fff;
+  font-size: 11px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.gh-enhancer-lightbox-zoom {
+  font-size: 13px;
+  color: var(--fgColor-muted, var(--color-fg-muted, #8b949e));
+  min-width: 50px;
+  text-align: center;
+}
+
+.gh-enhancer-lightbox-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--borderColor-muted, var(--color-border-muted, #30363d));
+}
+
+.gh-enhancer-lightbox-target {
+  cursor: zoom-in !important;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.gh-enhancer-lightbox-target:hover {
+  opacity: 0.85;
+}

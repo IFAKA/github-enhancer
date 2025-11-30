@@ -1,0 +1,17 @@
+/* GitHub Enhancer - External Links Styles */
+
+.gh-enhancer-external-link {
+  position: relative;
+}
+
+.gh-enhancer-external-icon {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 3px;
+  vertical-align: middle;
+  opacity: 0.6;
+}
+
+.gh-enhancer-external-link:hover .gh-enhancer-external-icon {
+  opacity: 1;
+}

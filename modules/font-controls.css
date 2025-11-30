@@ -1,0 +1,50 @@
+/* GitHub Enhancer - Font Controls Styles */
+
+.gh-enhancer-font-controls-row {
+  padding-bottom: 16px;
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));
+}
+
+.gh-enhancer-font-controls-row .BorderGrid-cell {
+  padding-top: 16px !important;
+}
+
+.gh-enhancer-font-controls-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fgColor-muted, var(--color-fg-muted, #8b949e));
+  margin-bottom: 8px;
+}
+
+.gh-enhancer-font-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gh-enhancer-font-btn {
+  background: none;
+  border: 1px solid var(--borderColor-muted, var(--color-border-muted, #30363d));
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: var(--fgColor-muted, var(--color-fg-muted, #8b949e));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.gh-enhancer-font-btn:hover {
+  background: var(--bgColor-neutral-muted, var(--color-neutral-muted, #6e768166));
+  color: var(--fgColor-default, var(--color-fg-default, #e6edf3));
+  border-color: var(--borderColor-default, var(--color-border-default, #484f58));
+}
+
+.gh-enhancer-font-size {
+  font-size: 12px;
+  color: var(--fgColor-muted, var(--color-fg-muted, #8b949e));
+  min-width: 40px;
+  text-align: center;
+}

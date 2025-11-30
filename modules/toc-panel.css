@@ -1,0 +1,111 @@
+/* GitHub Enhancer - TOC Panel Styles */
+
+.gh-enhancer-toc-panel {
+  position: fixed;
+  right: 16px;
+  top: 80px;
+  width: 250px;
+  max-height: calc(100vh - 120px);
+  background: var(--bgColor-default, var(--color-canvas-default, #0d1117));
+  border: 1px solid var(--borderColor-muted, var(--color-border-muted, #30363d));
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.gh-enhancer-toc-panel.gh-enhancer-toc-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(20px);
+}
+
+.gh-enhancer-toc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted, #30363d));
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--fgColor-default, var(--color-fg-default, #e6edf3));
+}
+
+.gh-enhancer-toc-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  color: var(--fgColor-muted, var(--color-fg-muted, #8b949e));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gh-enhancer-toc-close:hover {
+  background: var(--bgColor-neutral-muted, var(--color-neutral-muted, #6e768166));
+  color: var(--fgColor-default, var(--color-fg-default, #e6edf3));
+}
+
+.gh-enhancer-toc-nav {
+  overflow-y: auto;
+  padding: 8px 0;
+  flex: 1;
+}
+
+.gh-enhancer-toc-link {
+  display: block;
+  padding: 6px 16px;
+  font-size: 13px;
+  color: var(--fgColor-muted, var(--color-fg-muted, #8b949e));
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-left: 2px solid transparent;
+  transition: all 0.15s;
+}
+
+.gh-enhancer-toc-link:hover {
+  color: var(--fgColor-default, var(--color-fg-default, #e6edf3));
+  background: var(--bgColor-neutral-muted, var(--color-neutral-muted, #6e768166));
+}
+
+.gh-enhancer-toc-link.gh-enhancer-toc-active {
+  color: var(--fgColor-accent, var(--color-accent-fg, #58a6ff));
+  border-left-color: var(--fgColor-accent, var(--color-accent-fg, #58a6ff));
+  background: var(--bgColor-accent-muted, rgba(56, 139, 253, 0.1));
+}
+
+.gh-enhancer-toc-level-2 { padding-left: 24px; }
+.gh-enhancer-toc-level-3 { padding-left: 32px; font-size: 12px; }
+.gh-enhancer-toc-level-4 { padding-left: 40px; font-size: 12px; }
+.gh-enhancer-toc-level-5 { padding-left: 48px; font-size: 11px; }
+.gh-enhancer-toc-level-6 { padding-left: 56px; font-size: 11px; }
+
+/* TOC Toggle Button */
+.gh-enhancer-toc-toggle {
+  position: fixed;
+  right: 16px;
+  top: 80px;
+  width: 40px;
+  height: 40px;
+  background: var(--bgColor-default, var(--color-canvas-default, #0d1117));
+  border: 1px solid var(--borderColor-muted, var(--color-border-muted, #30363d));
+  border-radius: 6px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  color: var(--fgColor-muted, var(--color-fg-muted, #8b949e));
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.gh-enhancer-toc-toggle:hover {
+  color: var(--fgColor-default, var(--color-fg-default, #e6edf3));
+  background: var(--bgColor-neutral-muted, var(--color-neutral-muted, #6e768166));
+}

@@ -1,0 +1,93 @@
+/* GitHub Enhancer - Collapse Toggle Styles */
+
+/* Add file button container (moved to LatestCommit box) */
+.gh-enhancer-add-file-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+}
+
+/* Allow dropdown to escape ALL parent containers */
+[data-hpc="true"],
+[data-hpc="true"] table,
+[data-hpc="true"] tbody,
+[data-hpc="true"] tr,
+[data-hpc="true"] td,
+[class*="LatestCommit-module__Box"],
+[class*="LatestCommit-module__Box"] > div,
+[class*="DirectoryContent-module"] {
+  overflow: visible !important;
+}
+
+/* Ensure dropdown has high z-index and proper positioning */
+.gh-enhancer-add-file-container > div {
+  position: absolute !important;
+  z-index: 1000 !important;
+}
+
+.gh-enhancer-add-file-container [data-component="AnchoredOverlay"] {
+  z-index: 1000 !important;
+}
+
+/* Add file button styling */
+.gh-enhancer-add-file {
+  background: none !important;
+  border: none !important;
+  cursor: pointer;
+  padding: 4px !important;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fgColor-muted, var(--color-fg-muted));
+  min-width: auto !important;
+}
+
+.gh-enhancer-add-file:hover {
+  background: var(--bgColor-neutral-muted, var(--color-neutral-muted)) !important;
+  color: var(--fgColor-default, var(--color-fg-default));
+}
+
+/* Hide text label, keep only icon */
+.gh-enhancer-add-file [class*="prc-Button-Label"] {
+  font-size: 0 !important;
+}
+
+.gh-enhancer-add-file [class*="prc-Button-Label"] svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Toggle button */
+.gh-enhancer-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fgColor-muted, var(--color-fg-muted));
+  margin-left: 4px;
+}
+
+.gh-enhancer-toggle:hover {
+  background: var(--bgColor-neutral-muted, var(--color-neutral-muted));
+  color: var(--fgColor-default, var(--color-fg-default));
+}
+
+/* Arrow icon */
+.gh-enhancer-arrow {
+  transition: transform 0.2s ease;
+}
+
+.gh-enhancer-arrow.gh-enhancer-collapsed {
+  transform: rotate(-90deg);
+}
+
+/* Hidden rows */
+.gh-enhancer-hidden {
+  display: none !important;
+}

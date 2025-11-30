@@ -1,0 +1,76 @@
+/* GitHub Enhancer - Repo Actions Styles */
+
+/* Repo actions in sidebar */
+.gh-enhancer-repo-actions {
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));
+}
+
+.gh-enhancer-repo-actions > div:first-of-type {
+  padding-top: 0 !important;
+}
+
+.gh-enhancer-actions-container {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.gh-enhancer-actions-container > li {
+  list-style: none;
+  display: flex;
+}
+
+.gh-enhancer-actions-container .BtnGroup,
+.gh-enhancer-actions-container .js-toggler-container {
+  width: 100%;
+}
+
+.gh-enhancer-actions-container .BtnGroup > a,
+.gh-enhancer-actions-container .BtnGroup > button,
+.gh-enhancer-actions-container .BtnGroup-parent > form {
+  flex: 1;
+}
+
+.gh-enhancer-actions-container .btn,
+.gh-enhancer-actions-container .Button {
+  width: 100%;
+  justify-content: center;
+}
+
+.gh-enhancer-actions-container .mr-2 {
+  margin-right: 0 !important;
+}
+
+.gh-enhancer-actions-container .Counter,
+.gh-enhancer-actions-container [class*="counter"],
+.gh-enhancer-actions-container [class*="Counter"] {
+  background-color: transparent !important;
+  padding: 0 !important;
+  margin-left: 6px !important;
+}
+
+/* Hide text labels in action buttons (CSS is more reliable for lazy-loaded content) */
+.gh-enhancer-actions-container .Button-label,
+.gh-enhancer-actions-container span.d-inline:not(.Counter),
+.gh-enhancer-actions-container .Button-content > .Button-label,
+.gh-enhancer-actions-container [class*="Button"] .Button-label {
+  display: none !important;
+}
+
+/* Hide watch button text (React component uses prc-Button-Label class) */
+.gh-enhancer-actions-container [class*="prc-Button-Label"] {
+  font-size: 0 !important;
+}
+
+.gh-enhancer-actions-container [class*="prc-Button-Label"] .Counter,
+.gh-enhancer-actions-container [class*="prc-Button-Label"] [class*="Counter"] {
+  font-size: 12px !important;
+  margin-left: 0 !important;
+}
+
+/* Override btn-sm padding */
+.gh-enhancer-actions-container .btn-sm {
+  padding: 3px 8px !important;
+}

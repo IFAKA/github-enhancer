@@ -1,0 +1,10 @@
+/* GitHub Enhancer - Import Linkify Styles */
+
+/* When Ctrl/Cmd is pressed, show link styling on npm targets */
+.gh-enhancer-ctrl-pressed .gh-enhancer-npm-target {
+  text-decoration: underline !important;
+  text-decoration-style: solid !important;
+  text-underline-offset: 2px !important;
+  cursor: pointer !important;
+  color: var(--fgColor-accent, var(--color-accent-fg, #58a6ff)) !important;
+}

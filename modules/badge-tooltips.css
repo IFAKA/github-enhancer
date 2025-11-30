@@ -1,0 +1,9 @@
+/* GitHub Enhancer - Badge Tooltips Styles */
+
+.gh-enhancer-badge {
+  cursor: help;
+}
+
+.gh-enhancer-badge:hover {
+  filter: brightness(1.1);
+}
