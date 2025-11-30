@@ -1,5 +1,6 @@
 <p align="center">
   <img src="banner.png" alt="GitHub Enhancer Banner" width="100%">
+  ![preview](https://github.com/user-attachments/assets/8c38e888-3225-45ea-bb7e-eddf197aa8ed)
 </p>
 
 # GitHub Enhancer
