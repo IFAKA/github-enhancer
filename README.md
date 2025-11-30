@@ -12,44 +12,25 @@ A Chrome extension that enhances the GitHub repository experience with better RE
 
 ## Demo
 
-<table>
-<tr>
-<td width="50%">
-
 ### Image Lightbox
 Click any image for fullscreen view with zoom, pan, copy, and download.
 
-[▶️ Watch Demo](https://github.com/IFAKA/github-enhancer/releases/download/v1.0.0/light-box.mp4)
-
-</td>
-<td width="50%">
+<video src="https://github.com/IFAKA/github-enhancer/releases/download/v1.0.0/light-box.mp4" width="100%" controls></video>
 
 ### Repo Link Previews
 Hover over GitHub repo links to see stats and description.
 
-[▶️ Watch Demo](https://github.com/IFAKA/github-enhancer/releases/download/v1.0.0/link-repo.mp4)
-
-</td>
-</tr>
-<tr>
-<td width="50%">
+<video src="https://github.com/IFAKA/github-enhancer/releases/download/v1.0.0/link-repo.mp4" width="100%" controls></video>
 
 ### External Link Indicators
 Visual markers and quick actions for external links.
 
-[▶️ Watch Demo](https://github.com/IFAKA/github-enhancer/releases/download/v1.0.0/open-link.mp4)
-
-</td>
-<td width="50%">
+<video src="https://github.com/IFAKA/github-enhancer/releases/download/v1.0.0/open-link.mp4" width="100%" controls></video>
 
 ### Collapsible Code Blocks
 Long code blocks auto-collapse with expand button.
 
-[▶️ Watch Demo](https://github.com/IFAKA/github-enhancer/releases/download/v1.0.0/video-test-1.mp4)
-
-</td>
-</tr>
-</table>
+<video src="https://github.com/IFAKA/github-enhancer/releases/download/v1.0.0/video-test-1.mp4" width="100%" controls></video>
 
 ## Features
 
