@@ -7,6 +7,9 @@
   const GH = window.GitHubEnhancer = window.GitHubEnhancer || {};
 
   let observer = null;
+  let lastUrl = location.href;
+  let enhanceTimeout = null;
+  let isNavigating = false;
 
   /**
    * Main enhance function - calls all module init functions
@@ -63,20 +66,71 @@
   }
 
   /**
+   * Schedule enhancement with debouncing
+   * Waits for DOM to settle before enhancing
+   */
+  function scheduleEnhance(delay = 50) {
+    if (enhanceTimeout) {
+      clearTimeout(enhanceTimeout);
+    }
+    enhanceTimeout = setTimeout(() => {
+      enhanceTimeout = null;
+      enhance();
+    }, delay);
+  }
+
+  /**
+   * Handle navigation - reset and re-enhance
+   */
+  function handleNavigation() {
+    if (isNavigating) return;
+    isNavigating = true;
+
+    reset();
+
+    // Wait for DOM to be ready, then enhance
+    // Use requestAnimationFrame to wait for render
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        isNavigating = false;
+        scheduleEnhance(100);
+      });
+    });
+  }
+
+  /**
+   * Check if URL changed and handle it
+   */
+  function checkUrlChange() {
+    if (location.href !== lastUrl) {
+      lastUrl = location.href;
+      handleNavigation();
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Setup mutation observer for SPA navigation
+   * Watches for content container changes as a reliable signal
    */
   function setupObserver() {
     if (observer) return;
 
-    let lastUrl = location.href;
+    // Debounce mutations to avoid excessive processing
+    let mutationTimeout = null;
 
-    observer = new MutationObserver(() => {
-      if (location.href !== lastUrl) {
-        lastUrl = location.href;
-        reset();
-        setTimeout(enhance, 500);
-      } else if (!GH.state.isProcessed) {
-        enhance();
+    observer = new MutationObserver((mutations) => {
+      // Check for URL change first
+      if (checkUrlChange()) return;
+
+      // If not processed yet, try to enhance
+      if (!GH.state.isProcessed) {
+        if (mutationTimeout) clearTimeout(mutationTimeout);
+        mutationTimeout = setTimeout(() => {
+          mutationTimeout = null;
+          enhance();
+        }, 100);
       }
     });
 
@@ -90,25 +144,52 @@
    * Initialize
    */
   function init() {
+    // Initial enhancement
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', enhance);
+      document.addEventListener('DOMContentLoaded', () => scheduleEnhance(0));
     } else {
-      enhance();
+      scheduleEnhance(0);
     }
 
     setupObserver();
 
-    // Handle GitHub's Turbo navigation
-    document.addEventListener('turbo:load', () => {
+    // Handle GitHub's Turbo navigation (multiple events for reliability)
+    document.addEventListener('turbo:load', handleNavigation);
+    document.addEventListener('turbo:render', handleNavigation);
+    document.addEventListener('turbo:frame-render', handleNavigation);
+
+    // Handle turbo:before-render to reset before new content
+    document.addEventListener('turbo:before-render', () => {
       reset();
-      setTimeout(enhance, 100);
     });
 
-    // Handle pjax navigation
-    document.addEventListener('pjax:end', () => {
-      reset();
-      setTimeout(enhance, 100);
+    // Handle pjax navigation (legacy, but still used in some places)
+    document.addEventListener('pjax:end', handleNavigation);
+
+    // Handle browser back/forward navigation
+    window.addEventListener('popstate', () => {
+      // Small delay to let the page update
+      setTimeout(() => {
+        checkUrlChange();
+        if (!GH.state.isProcessed) {
+          handleNavigation();
+        }
+      }, 50);
     });
+
+    // Intercept pushState and replaceState for immediate detection
+    const originalPushState = history.pushState;
+    const originalReplaceState = history.replaceState;
+
+    history.pushState = function(...args) {
+      originalPushState.apply(this, args);
+      setTimeout(() => checkUrlChange(), 0);
+    };
+
+    history.replaceState = function(...args) {
+      originalReplaceState.apply(this, args);
+      setTimeout(() => checkUrlChange(), 0);
+    };
   }
 
   init();
