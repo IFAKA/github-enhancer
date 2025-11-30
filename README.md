@@ -6,24 +6,12 @@
 
 A Chrome extension that enhances the GitHub repository experience with better README readability, image viewing, and UI improvements.
 
-## Preview
-
-<img src="https://github.com/user-attachments/assets/63f54bf1-e6a1-44ab-a5ff-e39aae0bd6a5" alt="GitHub Enhancer Preview" width="100%">
-
 ## Demo
 
-### Image Lightbox
-<video src="https://github.com/user-attachments/assets/3bd3e22e-9713-41a5-98d5-7681440d0fb3" width="100%" controls></video>
-
-### Repo Link Previews
-<video src="https://github.com/user-attachments/assets/f89f15cd-1a47-4c9f-b21a-b492b206ccc7" width="100%" controls></video>
-
-### External Link Indicators
-<video src="https://github.com/user-attachments/assets/4230c937-90b8-474a-81c2-cbbfd786a438" width="100%" controls></video>
-
-### Collapsible Code Blocks
 <video src="https://github.com/user-attachments/assets/0341746c-f6ec-4391-9182-aff69e1dc617" width="100%" controls></video>
-
+<video src="https://github.com/user-attachments/assets/3bd3e22e-9713-41a5-98d5-7681440d0fb3" width="100%" controls></video>
+<video src="https://github.com/user-attachments/assets/f89f15cd-1a47-4c9f-b21a-b492b206ccc7" width="100%" controls></video>
+<video src="https://github.com/user-attachments/assets/4230c937-90b8-474a-81c2-cbbfd786a438" width="100%" controls></video>
 
 ## Features
 
