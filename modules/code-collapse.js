@@ -35,8 +35,9 @@
 
         block.dataset.fullHeight = actualHeight;
 
-        pre.style.maxHeight = maxHeight + 'px';
-        pre.style.overflow = 'hidden';
+        // Use CSS custom property for dynamic maxHeight, class for overflow
+        pre.style.setProperty('--gh-collapse-height', maxHeight + 'px');
+        pre.style.maxHeight = 'var(--gh-collapse-height)';
         block.classList.add('gh-enhancer-code-collapsed');
 
         const expandBtn = document.createElement('button');
@@ -50,26 +51,24 @@
           <span class="gh-enhancer-expand-lines">+${hiddenLines} lines</span>
         `;
 
-        let isCollapsed = true;
-
         expandBtn.addEventListener('click', (e) => {
           e.preventDefault();
-          isCollapsed = !isCollapsed;
+          const isCurrentlyCollapsed = block.classList.contains('gh-enhancer-code-collapsed');
 
-          if (isCollapsed) {
-            pre.style.maxHeight = maxHeight + 'px';
-            pre.style.overflow = 'hidden';
+          if (isCurrentlyCollapsed) {
+            // Expand
+            block.classList.remove('gh-enhancer-code-collapsed');
+            block.classList.add('gh-enhancer-code-expanded');
+            expandBtn.querySelector('.gh-enhancer-expand-text').textContent = 'Collapse';
+            expandBtn.querySelector('.gh-enhancer-expand-lines').textContent = `${totalLines} lines`;
+            expandBtn.classList.add('gh-enhancer-code-expand-rotated');
+          } else {
+            // Collapse
+            block.classList.remove('gh-enhancer-code-expanded');
             block.classList.add('gh-enhancer-code-collapsed');
             expandBtn.querySelector('.gh-enhancer-expand-text').textContent = 'Expand';
             expandBtn.querySelector('.gh-enhancer-expand-lines').textContent = `+${hiddenLines} lines`;
-            expandBtn.querySelector('.gh-enhancer-expand-icon').style.transform = '';
-          } else {
-            pre.style.maxHeight = 'none';
-            pre.style.overflow = 'visible';
-            block.classList.remove('gh-enhancer-code-collapsed');
-            expandBtn.querySelector('.gh-enhancer-expand-text').textContent = 'Collapse';
-            expandBtn.querySelector('.gh-enhancer-expand-lines').textContent = `${totalLines} lines`;
-            expandBtn.querySelector('.gh-enhancer-expand-icon').style.transform = 'rotate(180deg)';
+            expandBtn.classList.remove('gh-enhancer-code-expand-rotated');
           }
         });
 
@@ -87,10 +86,10 @@
     document.querySelectorAll('.highlight[data-gh-enhancer-collapse]').forEach(block => {
       const pre = block.querySelector('pre');
       if (pre) {
+        pre.style.removeProperty('--gh-collapse-height');
         pre.style.maxHeight = '';
-        pre.style.overflow = '';
       }
-      block.classList.remove('gh-enhancer-code-collapsed');
+      block.classList.remove('gh-enhancer-code-collapsed', 'gh-enhancer-code-expanded');
       block.removeAttribute('data-gh-enhancer-collapse');
       block.removeAttribute('data-full-height');
     });

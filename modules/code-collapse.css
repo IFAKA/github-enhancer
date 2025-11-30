@@ -1,5 +1,16 @@
 /* GitHub Enhancer - Code Collapse Styles */
 
+/* Collapsed state for pre element */
+.highlight.gh-enhancer-code-collapsed pre {
+  overflow: hidden;
+}
+
+/* Expanded state for pre element */
+.highlight.gh-enhancer-code-expanded pre {
+  max-height: none !important;
+  overflow: visible;
+}
+
 /* Fade gradient at bottom when collapsed */
 .highlight.gh-enhancer-code-collapsed {
   position: relative;
@@ -46,6 +57,10 @@
 .gh-enhancer-expand-icon {
   transition: transform 0.2s;
   flex-shrink: 0;
+}
+
+.gh-enhancer-code-expand-rotated .gh-enhancer-expand-icon {
+  transform: rotate(180deg);
 }
 
 .gh-enhancer-expand-text {

@@ -14,6 +14,9 @@
     blur: null
   };
 
+  // IntersectionObserver for lazy image processing
+  let imageObserver = null;
+
   /**
    * Create image lightbox
    */
@@ -355,27 +358,20 @@
   }
 
   /**
-   * Add click handlers to images for lightbox
+   * Process a single image for lightbox functionality
    */
-  function setupImageLightbox() {
-    const readme = GH.utils.findReadme();
-    if (!readme) return;
+  function processImageForLightbox(img) {
+    if (img.dataset.ghEnhancerLightbox === 'processed') return;
+    img.dataset.ghEnhancerLightbox = 'processed';
 
-    createLightbox();
-
-    const images = readme.querySelectorAll('img:not([alt*="badge"]):not([src*="shields.io"]):not([src*="img.shields"])');
-
-    images.forEach(img => {
-      if (img.dataset.ghEnhancerLightbox) return;
-      img.dataset.ghEnhancerLightbox = 'true';
-
+    // Check dimensions - if image not loaded yet, wait for load
+    const checkAndSetup = () => {
       if (img.naturalWidth < 100 && img.naturalHeight < 100) return;
 
       img.classList.add('gh-enhancer-lightbox-target');
 
       img.addEventListener('click', (e) => {
         if (e.ctrlKey || e.metaKey) return;
-
         e.preventDefault();
         e.stopPropagation();
         openImageInLightbox(img);
@@ -385,7 +381,6 @@
       if (parentLink) {
         parentLink.addEventListener('click', (e) => {
           if (e.ctrlKey || e.metaKey) return;
-
           if (e.target === img || e.target.closest('img') === img) {
             e.preventDefault();
             e.stopPropagation();
@@ -396,7 +391,6 @@
         parentLink.addEventListener('keydown', (e) => {
           if (e.key === 'Enter') {
             if (e.ctrlKey || e.metaKey) return;
-
             e.preventDefault();
             e.stopPropagation();
             openImageInLightbox(img);
@@ -405,7 +399,53 @@
 
         parentLink.title = 'Click to view image • Ctrl/Cmd + click to open link';
       }
-    });
+    };
+
+    // If image already loaded, process immediately
+    if (img.complete && img.naturalWidth > 0) {
+      checkAndSetup();
+    } else {
+      // Wait for image to load
+      img.addEventListener('load', checkAndSetup, { once: true });
+    }
+  }
+
+  /**
+   * Add click handlers to images for lightbox (lazy loading with IntersectionObserver)
+   */
+  function setupImageLightbox() {
+    const readme = GH.utils.findReadme();
+    if (!readme) return;
+
+    createLightbox();
+
+    const images = readme.querySelectorAll('img:not([alt*="badge"]):not([src*="shields.io"]):not([src*="img.shields"])');
+
+    // Use IntersectionObserver for lazy processing
+    if ('IntersectionObserver' in window) {
+      imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            processImageForLightbox(entry.target);
+            imageObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        rootMargin: '100px' // Start processing slightly before visible
+      });
+
+      images.forEach(img => {
+        if (img.dataset.ghEnhancerLightbox) return;
+        img.dataset.ghEnhancerLightbox = 'pending';
+        imageObserver.observe(img);
+      });
+    } else {
+      // Fallback for older browsers
+      images.forEach(img => {
+        if (img.dataset.ghEnhancerLightbox) return;
+        processImageForLightbox(img);
+      });
+    }
   }
 
   function init() {
@@ -413,6 +453,11 @@
   }
 
   function reset() {
+    // Clean up IntersectionObserver
+    if (imageObserver) {
+      imageObserver.disconnect();
+      imageObserver = null;
+    }
     // Clean up document-level event listeners
     if (documentHandlers.mousemove) {
       document.removeEventListener('mousemove', documentHandlers.mousemove);

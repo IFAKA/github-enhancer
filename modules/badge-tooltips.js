@@ -5,18 +5,22 @@
 
   const GH = window.GitHubEnhancer = window.GitHubEnhancer || {};
 
-  const badgePatterns = [
-    { pattern: /build|ci|test|workflow/i, explanation: 'Build Status: Shows if automated tests/CI pipeline is passing' },
-    { pattern: /coverage|codecov|coveralls/i, explanation: 'Code Coverage: Percentage of code covered by tests' },
-    { pattern: /npm.*v|version/i, explanation: 'npm Version: Current published version on npm registry' },
-    { pattern: /downloads/i, explanation: 'Downloads: Number of times this package has been downloaded' },
-    { pattern: /license/i, explanation: 'License: The open source license this project uses' },
-    { pattern: /discord|chat|slack/i, explanation: 'Community Chat: Join the community chat for support' },
-    { pattern: /bundle.*size|size/i, explanation: 'Bundle Size: Minified/gzipped size when added to your project' },
-    { pattern: /dependencies|deps/i, explanation: 'Dependencies: Status of project dependencies' },
-    { pattern: /stars|github/i, explanation: 'GitHub Stars: Popularity indicator on GitHub' },
-    { pattern: /typescript|types/i, explanation: 'TypeScript: This package includes TypeScript type definitions' },
+  // Badge explanations lookup - keys are group indices from combined regex
+  const badgeExplanations = [
+    'Build Status: Shows if automated tests/CI pipeline is passing',      // build|ci|test|workflow
+    'Code Coverage: Percentage of code covered by tests',                  // coverage|codecov|coveralls
+    'npm Version: Current published version on npm registry',              // npm.*v|version
+    'Downloads: Number of times this package has been downloaded',         // downloads
+    'License: The open source license this project uses',                  // license
+    'Community Chat: Join the community chat for support',                 // discord|chat|slack
+    'Bundle Size: Minified/gzipped size when added to your project',      // bundle.*size|size
+    'Dependencies: Status of project dependencies',                        // dependencies|deps
+    'GitHub Stars: Popularity indicator on GitHub',                        // stars|github
+    'TypeScript: This package includes TypeScript type definitions'        // typescript|types
   ];
+
+  // Single combined regex with capturing groups - compiled once
+  const badgePattern = /(build|ci|test|workflow)|(coverage|codecov|coveralls)|(npm.*v|version)|(downloads)|(license)|(discord|chat|slack)|(bundle.*size|size)|(dependencies|deps)|(stars|github)|(typescript|types)/i;
 
   /**
    * Add badge explanation tooltips
@@ -35,11 +39,15 @@
       const src = badge.src || '';
       const combined = alt + ' ' + src;
 
-      for (const { pattern, explanation } of badgePatterns) {
-        if (pattern.test(combined)) {
-          badge.classList.add('gh-enhancer-badge');
-          badge.title = explanation;
-          break;
+      const match = combined.match(badgePattern);
+      if (match) {
+        // Find which group matched (index 1-10, skip full match at 0)
+        for (let i = 1; i < match.length; i++) {
+          if (match[i]) {
+            badge.classList.add('gh-enhancer-badge');
+            badge.title = badgeExplanations[i - 1];
+            break;
+          }
         }
       }
     });
