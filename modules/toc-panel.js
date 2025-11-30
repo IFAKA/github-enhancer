@@ -139,7 +139,16 @@
       e.preventDefault();
       const index = parseInt(link.dataset.headingIndex, 10);
       if (headingElements[index]) {
-        headingElements[index].scrollIntoView({ behavior: 'smooth' });
+        // Get sticky header height (GitHub's sticky README header)
+        const stickyHeader = document.querySelector('.react-blob-header-edit-and-raw-actions, .js-sticky-offset-scroll, .sticky-content, [class*="sticky"]');
+        const stickyHeight = stickyHeader ? stickyHeader.offsetHeight : 60;
+        const offset = stickyHeight + 16; // sticky header + 16px padding
+
+        const elementTop = headingElements[index].getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+          top: elementTop - offset,
+          behavior: 'smooth'
+        });
       }
     });
 
