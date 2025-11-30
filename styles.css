@@ -469,21 +469,40 @@
   position: fixed;
   inset: 0;
   z-index: 10000;
-  display: none;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .gh-enhancer-lightbox.gh-enhancer-lightbox-visible {
-  display: flex;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* View Transitions API styles */
+::view-transition-old(lightbox-hero),
+::view-transition-new(lightbox-hero) {
+  /* Prevent aspect ratio distortion during animation */
+  object-fit: contain;
+  /* Fast, snappy animation */
+  animation-duration: 0.2s;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Fade the backdrop separately - faster */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.15s;
 }
 
 .gh-enhancer-lightbox-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
 }
 
 .gh-enhancer-lightbox-container {

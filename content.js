@@ -804,6 +804,12 @@
         const actualHeight = pre.scrollHeight;
         if (actualHeight <= maxHeight) return;
 
+        // Calculate lines (approximate line height of 20px)
+        const lineHeight = 20;
+        const totalLines = Math.round(actualHeight / lineHeight);
+        const visibleLines = Math.round(maxHeight / lineHeight);
+        const hiddenLines = totalLines - visibleLines;
+
         // Store original height
         block.dataset.fullHeight = actualHeight;
 
@@ -821,7 +827,7 @@
             <path d="M12.78 5.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 6.28a.75.75 0 0 1 1.06-1.06L8 8.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/>
           </svg>
           <span class="gh-enhancer-expand-text">Expand</span>
-          <span class="gh-enhancer-expand-lines">${Math.round(actualHeight / 20)} lines</span>
+          <span class="gh-enhancer-expand-lines">+${hiddenLines} lines</span>
         `;
 
         let isCollapsed = true;
@@ -835,12 +841,14 @@
             pre.style.overflow = 'hidden';
             block.classList.add('gh-enhancer-code-collapsed');
             expandBtn.querySelector('.gh-enhancer-expand-text').textContent = 'Expand';
+            expandBtn.querySelector('.gh-enhancer-expand-lines').textContent = `+${hiddenLines} lines`;
             expandBtn.querySelector('.gh-enhancer-expand-icon').style.transform = '';
           } else {
             pre.style.maxHeight = 'none';
             pre.style.overflow = 'visible';
             block.classList.remove('gh-enhancer-code-collapsed');
             expandBtn.querySelector('.gh-enhancer-expand-text').textContent = 'Collapse';
+            expandBtn.querySelector('.gh-enhancer-expand-lines').textContent = `${totalLines} lines`;
             expandBtn.querySelector('.gh-enhancer-expand-icon').style.transform = 'rotate(180deg)';
           }
         });
@@ -1068,6 +1076,45 @@
       }
     });
 
+    // Store reference to source image for close transition
+    let sourceImageRef = null;
+
+    lightboxOverlay.setSourceImage = (sourceImg) => {
+      sourceImageRef = sourceImg;
+    };
+
+    // Close function with View Transition support
+    function closeLightbox() {
+      if (document.startViewTransition && sourceImageRef) {
+        // Animate back to source image
+        document.startViewTransition(() => {
+          img.style.viewTransitionName = '';
+          sourceImageRef.style.viewTransitionName = 'lightbox-hero';
+          lightboxOverlay.classList.remove('gh-enhancer-lightbox-visible');
+        }).finished.then(() => {
+          // Clean up
+          sourceImageRef.style.viewTransitionName = '';
+          sourceImageRef = null;
+          currentZoom = 100;
+          resetPan();
+          img.style.transform = '';
+          img.style.cursor = 'zoom-in';
+          zoomLabel.textContent = '100%';
+        }).catch(() => {
+          // Handle errors silently
+        });
+      } else {
+        // Fallback: no animation
+        lightboxOverlay.classList.remove('gh-enhancer-lightbox-visible');
+        sourceImageRef = null;
+        currentZoom = 100;
+        resetPan();
+        img.style.transform = '';
+        img.style.cursor = 'zoom-in';
+        zoomLabel.textContent = '100%';
+      }
+    }
+
     // Close on backdrop click
     lightboxOverlay.querySelector('.gh-enhancer-lightbox-backdrop').addEventListener('click', closeLightbox);
 
@@ -1112,20 +1159,35 @@
       }
     });
 
-    function closeLightbox() {
-      lightboxOverlay.classList.remove('gh-enhancer-lightbox-visible');
-      currentZoom = 100;
-      resetPan();
-      img.style.transform = '';
-      img.style.cursor = 'zoom-in';
-      zoomLabel.textContent = '100%';
-    }
-
-    // Expose method to open lightbox
-    lightboxOverlay.openImage = (src) => {
+    // Expose method to open lightbox with View Transition
+    lightboxOverlay.openImage = (src, sourceImg) => {
       currentImageSrc = src;
-      img.src = src;
-      lightboxOverlay.classList.add('gh-enhancer-lightbox-visible');
+
+      // Use View Transitions API if available
+      if (document.startViewTransition && sourceImg) {
+        // Pre-load image to avoid delay
+        img.src = src;
+
+        // Give source image a view-transition-name
+        sourceImg.style.viewTransitionName = 'lightbox-hero';
+
+        // Start transition immediately
+        const transition = document.startViewTransition(() => {
+          // Remove name from source, add to lightbox image
+          sourceImg.style.viewTransitionName = '';
+          img.style.viewTransitionName = 'lightbox-hero';
+          lightboxOverlay.classList.add('gh-enhancer-lightbox-visible');
+        });
+
+        // Don't wait for finished - transition starts immediately
+        transition.finished.catch(() => {
+          // Handle any errors silently
+        });
+      } else {
+        // Fallback: just show
+        img.src = src;
+        lightboxOverlay.classList.add('gh-enhancer-lightbox-visible');
+      }
     };
   }
 
@@ -1161,7 +1223,9 @@
           imageSrc = img.dataset.canonicalSrc;
         }
 
-        lightboxOverlay.openImage(imageSrc);
+        // Pass source image for View Transition
+        lightboxOverlay.setSourceImage(img);
+        lightboxOverlay.openImage(imageSrc, img);
       });
 
       // Also prevent the parent link from navigating
