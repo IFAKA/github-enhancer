@@ -48,9 +48,7 @@
 }
 
 .gh-enhancer-lightbox-image-wrapper {
-  overflow: auto;
-  max-width: 90vw;
-  max-height: calc(90vh - 80px);
+  overflow: visible;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -63,6 +61,7 @@
   border-radius: 4px;
   transform-origin: center center;
   cursor: zoom-in;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), 0 0 0 2px rgba(0, 0, 0, 0.3);
 }
 
 /* When Ctrl/Cmd is pressed, show zoom-out cursor */

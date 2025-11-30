@@ -6,6 +6,32 @@
 
 A Chrome extension that enhances the GitHub repository experience with better README readability, image viewing, and UI improvements.
 
+## Preview
+
+![GitHub Enhancer Preview](media/preview.png)
+
+## Demo
+
+### Image Lightbox
+Click any image for fullscreen view with zoom, pan, copy, and download capabilities.
+
+https://github.com/user-attachments/assets/light-box.mp4
+
+### Repo Link Previews
+Hover over GitHub repository links to see stats, description, and language.
+
+https://github.com/user-attachments/assets/link-repo.mp4
+
+### External Link Indicators
+Visual markers and quick actions for external links.
+
+https://github.com/user-attachments/assets/open-link.mp4
+
+### Collapsible Code Blocks
+Long code blocks auto-collapse with an expand button.
+
+https://github.com/user-attachments/assets/video-test-1.mp4
+
 ## Features
 
 - **Image Lightbox** - Click images for fullscreen view with zoom, pan, copy, and download
