@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="banner.png" alt="GitHub Enhancer Banner" width="100%">
+</p>
+
 # GitHub Enhancer
 
 A Chrome extension that enhances the GitHub repository experience with better README readability, image viewing, and UI improvements.

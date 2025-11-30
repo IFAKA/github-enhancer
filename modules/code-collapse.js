@@ -31,6 +31,8 @@
         const visibleLines = Math.round(maxHeight / lineHeight);
         const hiddenLines = totalLines - visibleLines;
 
+        if (hiddenLines <= 0) return;
+
         block.dataset.fullHeight = actualHeight;
 
         pre.style.maxHeight = maxHeight + 'px';
